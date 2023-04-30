@@ -51,6 +51,42 @@ const Maria = 'Maria';
 console.log(Maria instanceof Person); //false
 //Mariaはnew演算子でインスタンス化していないからfalseです
 
+//////////////////////////////////////////////////
+//209.Prototypes 継承に似ている　
+//JSの各関数は自動的にPrototypesというプロパティを持つようになる。
+//これで、コンストラクタで定義した全てのメソッド、プロパティにアクセスできるようになります
+//内部プロパティみたいなもの。
+//このプロトタイプを使って、メソッドを実装するようにする
+
+console.log(Person.prototype);
+//ここで{constructor: ƒ}　calcAgeメソッドのプロトタイプができていることがわかる
+
+Person.prototype.calcAge = function(){ //prototypeのスペル間違えないで
+  console.log(2023 - this.birthYear);
+};
+//これで、コンストラクタ関数のPrototypesプロパティを設定します
+
+Miya.calcAge(); //24　　全てのメソッドにアクセスできますね？
+//いつもいつも関数には()をつける！忘れない！
+//このMiyaはコンストラクタ関数で作成されたものだから、それに追加された内部プロパティのcalcAge()にもアクセスできる！
+Noel.calcAge(); //29
+
+//プロトタイプを設定する他のやり方。
+Person.prototype.species = 'Homo Sapiens';
+console.log(Miya);
+console.log(Miya.species);//Homo Sapiens
+
+// calcAge()のケースも、speciesのケースもですが、プロトタイプは、bオブジェクトの中に直接あるわけではないです。それ自身のプロパティではないので。
+//own propaties（自身のプロパティ）はオブジェクト自体に直接宣言さてるものだけ
+//firstName = Miya　と
+//birthYear = 1999　の2つのみ
+//⏫これをチェックする方法がある
+console.log(Miya.hasOwnProperty('firstName')); //true
+console.log(Miya.hasOwnProperty('species')); //false
+
+
+
+
 ///////////////////////////////////////////
 //▼▼▼▼▼▼▼▼▼▼▼▼▼座学▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //206.What is Object-Oriented Programming?
