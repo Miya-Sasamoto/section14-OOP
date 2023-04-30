@@ -7,102 +7,138 @@
 //コンストラクタ関数と言っても、全然普通の関数です、
 //唯一の違うことは、new演算子でコンストラクタ関数を呼び出すことです
 
-//「人」で例を作ってみましょう
-//なお、コンストラクタ関数は、常に大文字で始まるというルールがあります
-const Person = function(firstName,birthYear){
-  // console.log(this); //これだとPerson {}と表示される
-  //>>>>>>>>プロパティ
-  this.firstName = firstName;
-  //ここでは、thisキーワードが、空のオブジェクトを意味する
-  this.birthYear = birthYear;
-  //返されたオブジェクトが、私たちがここで作ろうとしているオブジェクトになります
-  //引数のパラメータを受け取って、そのプロパティを設定するように記入する
-  //今回は引数とプロパティを同じ名前にしましたが、別に必ず同じ名前でなくてはいけないということではない
-  //引数は、「インスタンスプロパティ」にもなりえるのわかりますか？だってpersonのインスタンスでやりますので、インスタンスプロパティになりますよね。
-  //だって、インスタンス化すれば、この引数を利用できるわけになります
-  //>>>>>>>>関数
-  //このようにしてメソッドを書くことはできます、、、が、コンストラクタ関数の中でメソッドは絶対に作成しないでください
-  //理由は、このコンストラクタ関数を使って、信じられない数の人のオブジェクトを作るとなると全てのインスタンス化されたオブジェクトがこの関数を持ち運ぶことになる
-  //そうすると、この関数のコピーを信じられない数分作ることになるので、コードパフォーマンスに影響が出ます
-  // this.calcAge = function(){
-  //   console.log(2023 - this.birthYear);
-  // }
+// //「人」で例を作ってみましょう
+// //なお、コンストラクタ関数は、常に大文字で始まるというルールがあります
+// const Person = function(firstName,birthYear){
+//   // console.log(this); //これだとPerson {}と表示される
+//   //>>>>>>>>プロパティ
+//   this.firstName = firstName;
+//   //ここでは、thisキーワードが、空のオブジェクトを意味する
+//   this.birthYear = birthYear;
+//   //返されたオブジェクトが、私たちがここで作ろうとしているオブジェクトになります
+//   //引数のパラメータを受け取って、そのプロパティを設定するように記入する
+//   //今回は引数とプロパティを同じ名前にしましたが、別に必ず同じ名前でなくてはいけないということではない
+//   //引数は、「インスタンスプロパティ」にもなりえるのわかりますか？だってpersonのインスタンスでやりますので、インスタンスプロパティになりますよね。
+//   //だって、インスタンス化すれば、この引数を利用できるわけになります
+//   //>>>>>>>>関数
+//   //このようにしてメソッドを書くことはできます、、、が、コンストラクタ関数の中でメソッドは絶対に作成しないでください
+//   //理由は、このコンストラクタ関数を使って、信じられない数の人のオブジェクトを作るとなると全てのインスタンス化されたオブジェクトがこの関数を持ち運ぶことになる
+//   //そうすると、この関数のコピーを信じられない数分作ることになるので、コードパフォーマンスに影響が出ます
+//   // this.calcAge = function(){
+//   //   console.log(2023 - this.birthYear);
+//   // }
+// };
+// //new演算子で関数を呼び出します。インスタンス化
+// const Miya = new Person('Miya',1999);
+// //それを新しく作った変数にnew演算子で関数を呼び出したものを格納する
+// console.log(Miya);//Person {firstName: 'Miya', birthYear: 1999}
+//
+// //new演算子で関数を呼ぶだすと起こること↓
+// //1.空のオブジェクトを新規に作成します
+// //2.関数が呼び出され、この関数呼び出しの中で、thisキーワードがこの新しく作成されたオブジェクトに設定される
+// // this = 新しい空のオブジェクト
+// //3.新しく作成されたオブジェクトをプロトタイプにリンクさせる
+// //4.最初に作成したオブジェクトをコンストラクタ関数から自動的に返す
+// //　⇨しかしこの時点でオブジェクトは空である必要はないです
+//
+// const Noel = new Person('Noel',1994);
+// console.log(Noel);
+// //このようにして、同じコンストラクタ関数を使って色々とオブジェクトを作ることが可能
+// console.log(Noel instanceof Person); //true
+// //これはbooleanでPersonのインスタンスか否かを示す
+//
+// const Maria = 'Maria';
+// console.log(Maria instanceof Person); //false
+// //Mariaはnew演算子でインスタンス化していないからfalseです
+//
+// //////////////////////////////////////////////////
+// //209.Prototypes 継承に似ている　
+// //JSの各関数は自動的にPrototypesというプロパティを持つようになる。
+// //これで、コンストラクタで定義した全てのメソッド、プロパティにアクセスできるようになります
+// //内部プロパティみたいなもの。
+// //このプロトタイプを使って、メソッドを実装するようにする
+//
+// console.log(Person.prototype);
+// //ここで{constructor: ƒ}　calcAgeメソッドのプロトタイプができていることがわかる
+//
+// Person.prototype.calcAge = function(){ //prototypeのスペル間違えないで
+//   console.log(2023 - this.birthYear);
+// };
+// //これで、コンストラクタ関数のPrototypesプロパティを設定します
+//
+// Miya.calcAge(); //24　　全てのメソッドにアクセスできますね？
+// //いつもいつも関数には()をつける！忘れない！
+// //このMiyaはコンストラクタ関数で作成されたものだから、それに追加された内部プロパティのcalcAge()にもアクセスできる！
+// Noel.calcAge(); //29
+//
+// //プロトタイプを設定する他のやり方。
+// Person.prototype.species = 'Homo Sapiens';
+// console.log(Miya);
+// console.log(Miya.species);//Homo Sapiens
+//
+// // calcAge()のケースも、speciesのケースもですが、プロトタイプは、bオブジェクトの中に直接あるわけではないです。それ自身のプロパティではないので。
+// //own propaties（自身のプロパティ）はオブジェクト自体に直接宣言さてるものだけ
+// //firstName = Miya　と
+// //birthYear = 1999　の2つのみ
+// //⏫これをチェックする方法がある
+// console.log(Miya.hasOwnProperty('firstName')); //true
+// console.log(Miya.hasOwnProperty('species')); //false
+//
+// ///////////////////////////////////////////
+// //211.Prototypal Inheritance on Built-In Objects
+// console.log(Person.prototype.constructor);
+// //⇨これで、上記に書いたPersonのコンストラクタを手に入れることができる
+// console.dir(Person.prototype.constructor);
+// //ƒ Person(firstName,birthYear) となる
+// //しかし、nameやprotptypeも見ることができます
+// //console.dirはp部ジェクトのプロパティを見ることができる
+// const arr = [3,2,1,2,4,5];
+//
+// Array.prototype.unique = function(){
+//   return [...new Set(this)] //Setは、重複する値は格納できない
+// };
+//
+// console.log(arr.unique()); //(5) [3, 2, 1, 4, 5]
+//
+// //DOMを確認してみよう
+// const h1 = document.querySelector('h1');
+// console.dir(h1);
+
+////////////////////////////////////////////////
+//213.ES6 Classes
+//JSのクラスはjavaやC++のようには機能しません。
+
+//クラスの作り方の書き方は二つある。
+// //Class Ecpression
+// const PersonCl = class{}
+
+//クラス宣言
+class PersonCl{
+  //コンストラクタとメソッドを追加します
+  constructor(firstName,birthYear){
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+  //メソッドの書き方
+  calcAge(){
+    console.log(2023 - this.birthYear);
+  }
+  //実はこれはconstructor()の外側にあるよね？ということは、これはプロトタイプということです
 };
-//new演算子で関数を呼び出します。インスタンス化
-const Miya = new Person('Miya',1999);
-//それを新しく作った変数にnew演算子で関数を呼び出したものを格納する
-console.log(Miya);//Person {firstName: 'Miya', birthYear: 1999}
 
-//new演算子で関数を呼ぶだすと起こること↓
-//1.空のオブジェクトを新規に作成します
-//2.関数が呼び出され、この関数呼び出しの中で、thisキーワードがこの新しく作成されたオブジェクトに設定される
-// this = 新しい空のオブジェクト
-//3.新しく作成されたオブジェクトをプロトタイプにリンクさせる
-//4.最初に作成したオブジェクトをコンストラクタ関数から自動的に返す
-//　⇨しかしこの時点でオブジェクトは空である必要はないです
+//基本的にさっきとやり方は同じみたいね。
+const Taylor = new PersonCl('Taylor',1989);
+console.log(Taylor);
+//PersonCl {firstName: 'Taylor', birthYear: 1989}
+Taylor.calcAge();
 
-const Noel = new Person('Noel',1994);
-console.log(Noel);
-//このようにして、同じコンストラクタ関数を使って色々とオブジェクトを作ることが可能
-console.log(Noel instanceof Person); //true
-//これはbooleanでPersonのインスタンスか否かを示す
+//さっきみたいにクラスの中に書いてもいいし、今までみたいに外部で手動でつけることもできるよ。
+PersonCl.prototype.greet = function(){
+  console.log(`Hey, ${this.firstName} is here!`);
+}
+Taylor.greet(); //Hey, Taylor is here!
 
-const Maria = 'Maria';
-console.log(Maria instanceof Person); //false
-//Mariaはnew演算子でインスタンス化していないからfalseです
 
-//////////////////////////////////////////////////
-//209.Prototypes 継承に似ている　
-//JSの各関数は自動的にPrototypesというプロパティを持つようになる。
-//これで、コンストラクタで定義した全てのメソッド、プロパティにアクセスできるようになります
-//内部プロパティみたいなもの。
-//このプロトタイプを使って、メソッドを実装するようにする
-
-console.log(Person.prototype);
-//ここで{constructor: ƒ}　calcAgeメソッドのプロトタイプができていることがわかる
-
-Person.prototype.calcAge = function(){ //prototypeのスペル間違えないで
-  console.log(2023 - this.birthYear);
-};
-//これで、コンストラクタ関数のPrototypesプロパティを設定します
-
-Miya.calcAge(); //24　　全てのメソッドにアクセスできますね？
-//いつもいつも関数には()をつける！忘れない！
-//このMiyaはコンストラクタ関数で作成されたものだから、それに追加された内部プロパティのcalcAge()にもアクセスできる！
-Noel.calcAge(); //29
-
-//プロトタイプを設定する他のやり方。
-Person.prototype.species = 'Homo Sapiens';
-console.log(Miya);
-console.log(Miya.species);//Homo Sapiens
-
-// calcAge()のケースも、speciesのケースもですが、プロトタイプは、bオブジェクトの中に直接あるわけではないです。それ自身のプロパティではないので。
-//own propaties（自身のプロパティ）はオブジェクト自体に直接宣言さてるものだけ
-//firstName = Miya　と
-//birthYear = 1999　の2つのみ
-//⏫これをチェックする方法がある
-console.log(Miya.hasOwnProperty('firstName')); //true
-console.log(Miya.hasOwnProperty('species')); //false
-
-///////////////////////////////////////////
-//211.Prototypal Inheritance on Built-In Objects
-console.log(Person.prototype.constructor);
-//⇨これで、上記に書いたPersonのコンストラクタを手に入れることができる
-console.dir(Person.prototype.constructor);
-//ƒ Person(firstName,birthYear) となる
-//しかし、nameやprotptypeも見ることができます
-//console.dirはp部ジェクトのプロパティを見ることができる
-const arr = [3,2,1,2,4,5];
-
-Array.prototype.unique = function(){
-  return [...new Set(this)] //Setは、重複する値は格納できない
-};
-
-console.log(arr.unique()); //(5) [3, 2, 1, 4, 5]
-
-//DOMを確認してみよう
-const h1 = document.querySelector('h1');
-console.dir(h1);
 
 
 ///////////////////////////////////////////
@@ -165,7 +201,7 @@ console.dir(h1);
 //3.Object.create()
 //基本的にオブジェクトをプロトタイプオブジェクトにリンクさせる、最も簡単な方法。しかし、他の2つの方法ほど使われていません。
 
-//////////
+/////////////////////////////////////////////
 // Coding Challenge #1
 
 /*
@@ -179,29 +215,29 @@ DATA CAR 2: 'Mercedes' going at 95 km/h
 
 GOOD LUCK 😀
 */
-
-const Car = function(make,speed){
-  this.make = make;
-  this.speed = speed;
-};
-// Person.prototype.calcAge = function(){ //prototypeのスペル間違えないで
-//   console.log(2023 - this.birthYear);
+//
+// const Car = function(make,speed){
+//   this.make = make;
+//   this.speed = speed;
 // };
-
-Car.prototype.accelerate = function(){
-  this.speed += 10;
-  console.log(this.speed);
-};
-
-Car.prototype.brake = function(){
-  this.speed -= 5;
-  console.log(this.speed);
-};
-
-const bmw = new Car('BMW',120);
-const mercedes = new Car('Mercedes',95);
-
-bmw.accelerate();
-bmw.brake();
-mercedes.accelerate();
-mercedes.brake();
+// // Person.prototype.calcAge = function(){ //prototypeのスペル間違えないで
+// //   console.log(2023 - this.birthYear);
+// // };
+//
+// Car.prototype.accelerate = function(){
+//   this.speed += 10;
+//   console.log(this.speed);
+// };
+//
+// Car.prototype.brake = function(){
+//   this.speed -= 5;
+//   console.log(this.speed);
+// };
+//
+// const bmw = new Car('BMW',120);
+// const mercedes = new Car('Mercedes',95);
+//
+// bmw.accelerate();
+// bmw.brake();
+// mercedes.accelerate();
+// mercedes.brake();
