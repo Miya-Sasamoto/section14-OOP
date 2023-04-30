@@ -84,7 +84,25 @@ console.log(Miya.species);//Homo Sapiens
 console.log(Miya.hasOwnProperty('firstName')); //true
 console.log(Miya.hasOwnProperty('species')); //false
 
+///////////////////////////////////////////
+//211.Prototypal Inheritance on Built-In Objects
+console.log(Person.prototype.constructor);
+//⇨これで、上記に書いたPersonのコンストラクタを手に入れることができる
+console.dir(Person.prototype.constructor);
+//ƒ Person(firstName,birthYear) となる
+//しかし、nameやprotptypeも見ることができます
+//console.dirはp部ジェクトのプロパティを見ることができる
+const arr = [3,2,1,2,4,5];
 
+Array.prototype.unique = function(){
+  return [...new Set(this)] //Setは、重複する値は格納できない
+};
+
+console.log(arr.unique()); //(5) [3, 2, 1, 4, 5]
+
+//DOMを確認してみよう
+const h1 = document.querySelector('h1');
+console.dir(h1);
 
 
 ///////////////////////////////////////////
