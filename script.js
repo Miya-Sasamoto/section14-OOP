@@ -115,8 +115,8 @@
 //クラス宣言
 class PersonCl{
   //コンストラクタとメソッドを追加します
-  constructor(firstName,birthYear){
-    this.firstName = firstName;
+  constructor(fullName,birthYear){
+    this.fullName = fullName;
     this.birthYear = birthYear;
   }
   //メソッドの書き方
@@ -124,13 +124,30 @@ class PersonCl{
     console.log(2023 - this.birthYear);
   }
   //実はこれはconstructor()の外側にあるよね？ということは、これはプロトタイプということです
+
+  ///実はクラスでもsetterとgetterを設定することができます
+  get Age(){
+    return 2023 - this.birthYear;
+  }
+
+  //記載されている名前がスペースを含んだフルネームかを確認する
+  set fullName(name){
+    if (name.includes(' ')) this._fullName = name;
+    else alert (`${name} is not a full name!`);
+  }
+
+  get fullName(){
+    return this._fullName;
+  }
 };
 
 //基本的にさっきとやり方は同じみたいね。
-const Taylor = new PersonCl('Taylor',1989);
+const Taylor = new PersonCl('Taylor Swift',1989);
 console.log(Taylor);
 //PersonCl {firstName: 'Taylor', birthYear: 1989}
 Taylor.calcAge();
+console.log(Taylor.Age); //結果は同じ
+//get Ageの方はログをreturnで返してないから、ここでログに出す
 
 //さっきみたいにクラスの中に書いてもいいし、今までみたいに外部で手動でつけることもできるよ。
 PersonCl.prototype.greet = function(){
@@ -138,8 +155,34 @@ PersonCl.prototype.greet = function(){
 }
 Taylor.greet(); //Hey, Taylor is here!
 
+//////////////////////////////////////
+//214.Setters and Getters
+//全てのjsのオブジェクトは、setter とgetterのプロパティを持つことができる（javaみたい）
+//これらの特殊なプロパティを「アセッサープロパティ」といいます
 
+//以前やったBanist Appを例にやってみます
+const account = {
+  owner : 'Miya',
+  movements : [200,530,1000,170,300],
 
+//etter とgetterをどちらも書かないといけないわけではない！どっちかだけでいいからね！
+
+  //getを先頭につける
+  get latest(){
+    return this.movements.slice(-1).pop();
+  },
+  //一番最後の動きをとる。sliceだけだと、配列で帰ってくるので、popで配列をなしにしている
+
+  set latest(mov){
+    this.movements.push(mov);
+  },
+  //アカウントのmovementsに新しい値を入れる
+};
+console.log(account.latest); //300
+//getを使っているので、普通のプロパティのように書いていい。()を書いてメソッドにしなくていい
+account.latest = 50;
+//これも、setterなので、()はいらない。メソッドだけど、書かなくていいんです
+console.log(account.movements);
 
 ///////////////////////////////////////////
 //▼▼▼▼▼▼▼▼▼▼▼▼▼座学▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
