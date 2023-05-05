@@ -281,6 +281,40 @@ Person.hey();
 //しかしこれだと警鐘はされません。
 // miya.hey(); //これはできない
 
+Person.prototype.calcAge = function(){
+  console.log(2037 - this.birthYear);
+};
+
+//Studentという新しい関数を作る。Personクラスに一つ引数を加えた
+const Student = function(firstName,birthYear,course){
+  //このfirstNameとbirthYearは親クラスにしたいPersonクラスとかぶっている
+  // this.firstName = firstName;
+  // this.birthYear = birthYear;
+  Person.call(this,firstName,birthYear);
+  //このcalメソッドはfunctionが呼び出された時に、thisとして使用される値を自動的に設定
+  this.course = course;
+};
+
+//プロトタイプ同士のリンク
+Student.prototype = Object.create(Person.prototype);
+
+Student.prototype.introduce = function(){
+  console.log(`My name is ${this.firstName}, and I study ${this.course}.`)
+};
+
+const mike = new Student('Mike',2020,'Computer Science');
+console.log(mike);
+mike.introduce();
+mike.calcAge();
+
+console.log(mike instanceof Student);//true
+console.log(mike instanceof Person);//true
+//継承しているからどちらもtrueになります
+
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor);
+
+
 class PersonCl {
   constructor(fullName,birthYear){
     this.fullName = fullName;
@@ -320,6 +354,8 @@ class PersonCl {
 
 PersonCl.hey();
 //これで呼び出せます
+
+
 
 ////////////////////////////////////////////
 //216.Object.create
