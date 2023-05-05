@@ -320,3 +320,37 @@ class PersonCl {
 
 PersonCl.hey();
 //これで呼び出せます
+
+////////////////////////////////////////////
+//216.Object.create
+
+//3つ目の考え。少しばかり、プロトタイプ継承の考えが残っている
+//手動で値を設定することができ、任意の他のオブジェクトに設定することができる
+
+//先ほど作ったpersonクラスのプロトタイプを作成
+const PersonProto = {
+  //ここで初期化の関数を設定しておく
+  init(fistName,birthYear){
+    this.fistName = fistName;
+    this.birthYear = birthYear;
+  },
+  
+  calcAge(){
+    console.log(2023 - this.birthYear);
+  },
+
+};
+
+const steven = Object.create(PersonProto);
+console.log(steven);
+//これがthis.みたいになっている
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+
+//普通に考えて、コンストラクタ関数は、自動t系にインスタンスのプロトタイプがコンストラクタに設定される
+console.log(steven.__proto__ === PersonProto); //true
+
+const sarah = Object.create(PersonProto);
+sarah.init('Taylor',1989); //上の初期化の関数をここで入れる
+sarah.calcAge();//入れた年齢ともに、ここで計算する
