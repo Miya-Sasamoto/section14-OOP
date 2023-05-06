@@ -355,7 +355,34 @@ class PersonCl {
 PersonCl.hey();
 //これで呼び出せます
 
+//220.Inheritance Between "Classes": ES6 Classes
+class StudentCl extends PersonCl{
+  //ES&でクラス間の継承を実装するには、2つの材料が必要になります。
+  //extendsキーワード、スーパー関数の二つ
+  //extends は書くだけで、裏側でプロトタイプにリンクしてくれる
+  constructor(fullName,birthYear,course){
+    //fullnameとbirthyearはpersonClから引き継いでいる
+    //必ずsuperを最初に書く必要があります.先に発火させないといけない
+    super(fullName,birthYear)
+    //extendsでは前みたいにPersonCl.call(this,)とかやらなくてsuperだけで完結する.引数に親クラスの引数を渡す
+    //このsuperがサブクラスのthisを担う.
+    this.course = course;
+    //新しい引数だから、これは指定する
+  }
 
+  introduce(){
+    console.log(`Hey! My name is ${this.fullName} and my major is ${this.course} !`);
+  }
+  //同じメソッドでも、子クラスからは上書きができる
+  calcAge(){
+    console.log(`I am ${2037 - this.birthYear} yo, but as a student I feel more like ${2037 - this.birthYear + 10} lol`);
+  }
+}
+
+const martha = new StudentCl('Martha Jones',1999,'Religion');
+console.log(martha);
+martha.introduce(); //これで関数が呼び出される！
+martha.calcAge(); // 24
 
 ////////////////////////////////////////////
 //216.Object.create
@@ -405,36 +432,36 @@ DATA CAR 1: 'Ford' going at 120 km/h
 GOOD LUCK 😀
 */
 
-class CarCl{
-  constructor(make, speed) {
-    this.make = make;
-    this.speed = speed;
-  }
-  accelerate() {
-  this.speed += 10;
-  console.log(`${this.make} is going at ${this.speed} km/h`);
-  };
-
-  brake() {
-  this.speed -= 5;
-  console.log(`${this.make} is going at ${this.speed} km/h`);
-  };
-
-  get speedUS(){
-    return this.speed / 1.6;
-  }
-
-  set speedUS(speed){
-    this.speed = speed * 1.6;
-  }
-};
-
-const ford = new CarCl('Ford',120);
-console.log(ford.speedUS); //75
-ford.accelerate();
-ford.brake();
-ford.speedUS = 50;
-console.log(ford);
+// class CarCl{
+//   constructor(make, speed) {
+//     this.make = make;
+//     this.speed = speed;
+//   }
+//   accelerate() {
+//   this.speed += 10;
+//   console.log(`${this.make} is going at ${this.speed} km/h`);
+//   };
+//
+//   brake() {
+//   this.speed -= 5;
+//   console.log(`${this.make} is going at ${this.speed} km/h`);
+//   };
+//
+//   get speedUS(){
+//     return this.speed / 1.6;
+//   }
+//
+//   set speedUS(speed){
+//     this.speed = speed * 1.6;
+//   }
+// };
+//
+// const ford = new CarCl('Ford',120);
+// console.log(ford.speedUS); //75
+// ford.accelerate();
+// ford.brake();
+// ford.speedUS = 50;
+// console.log(ford);
 
 ///////////////////////////////////////
 // Coding Challenge #3
@@ -449,46 +476,46 @@ DATA CAR 1: 'Tesla' going at 120 km/h, with a charge of 23%
 
 GOOD LUCK 😀
 */
-
-const Car = function (make, speed) {
-  this.make = make;
-  this.speed = speed;
-};
-
-Car.prototype.accelerate = function () {
-  this.speed += 10;
-  console.log(`${this.make} is going at ${this.speed} km/h`);
-};
-
-Car.prototype.brake = function () {
-  this.speed -= 5;
-  console.log(`${this.make} is going at ${this.speed} km/h`);
-};
-
-const EV = function(make,speed,charge){
-  Car.call(this,make,speed);
-  this.charge = charge;
-}
-//プロトタイプの継承
-EV.prototype = Object.create(Car.prototype);
-
-EV.prototype.chargeBattery = function(chargeTo){
-  this.charge = chargeTo;
-}
-//この関数で、チャージされた後の充電量がchargeの相当量になる
-EV.prototype.accelerate = function(){
-  this.speed += 20;
-  this.charge--;
-  console.log(`${this.make} is going at ${this.speed} km/h,with a charge of ${this.charge}`);
-}
-
-const tesla = new EV('Tesra',120,23);
-tesla.chargeBattery(90);
-console.log(tesla);
-tesla.brake();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-
-//子クラスは親クラスから継承したメソッドを上書きすることができる。
-//それを表した例になります
+//
+// const Car = function (make, speed) {
+//   this.make = make;
+//   this.speed = speed;
+// };
+//
+// Car.prototype.accelerate = function () {
+//   this.speed += 10;
+//   console.log(`${this.make} is going at ${this.speed} km/h`);
+// };
+//
+// Car.prototype.brake = function () {
+//   this.speed -= 5;
+//   console.log(`${this.make} is going at ${this.speed} km/h`);
+// };
+//
+// const EV = function(make,speed,charge){
+//   Car.call(this,make,speed);
+//   this.charge = charge;
+// }
+// //プロトタイプの継承
+// EV.prototype = Object.create(Car.prototype);
+//
+// EV.prototype.chargeBattery = function(chargeTo){
+//   this.charge = chargeTo;
+// }
+// //この関数で、チャージされた後の充電量がchargeの相当量になる
+// EV.prototype.accelerate = function(){
+//   this.speed += 20;
+//   this.charge--;
+//   console.log(`${this.make} is going at ${this.speed} km/h,with a charge of ${this.charge}`);
+// }
+//
+// const tesla = new EV('Tesra',120,23);
+// tesla.chargeBattery(90);
+// console.log(tesla);
+// tesla.brake();
+// tesla.accelerate();
+// tesla.accelerate();
+// tesla.accelerate();
+//
+// //子クラスは親クラスから継承したメソッドを上書きすることができる。
+// //それを表した例になります
