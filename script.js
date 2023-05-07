@@ -438,6 +438,63 @@ const sarah = Object.create(PersonProto);
 sarah.init('Taylor',1989); //上の初期化の関数をここで入れる
 sarah.calcAge();//入れた年齢ともに、ここで計算する
 
+
+//222.Another Class Example
+//例として、以前Bankistアプリで実装した口座を使用します
+
+class Account {
+  //中に入れる単位を格納
+  constructor(owner,currency,pin){
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+    //下の2つのように、任意のインスタンスに、多くのプロパティを渡すことができます
+    this.movements = [];
+    //navigator.langeageはそのブラウザの場所を示すことができる
+    this.locale = navigator.language;
+
+    console.log(`Thanks for opening an your account, ${owner}!`);
+  }
+
+  deposit(val){
+    this.movements.push(val)
+  }
+  //depositと同じように機能しているからこのように書きます
+  withdraw(val){
+    this.deposit(-val)
+  }
+  //ローン貸与を認める
+  approveLoan(val){
+    return true;
+  }
+  
+  requestLoan(val){
+    if(this.approveLoan(val)){
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+}
+
+//new演算子を使って、子クラスを実装した
+const acc1 = new Account('Miya','JPY',1225);
+console.log(acc1);
+
+// //↓のようなやり方もありますがあまり賢いやり方ではない
+// acc1.movements.push(250);
+// acc1.movements.push(1000);
+// acc1.movements.push(-400);
+// acc1.movements.push(450);
+// //配列だからpushで値を押し込む
+acc1.deposit(250);
+acc1.withdraw(100);
+acc1.requestLoan(1000);
+
+console.log(acc1.movements);
+console.log(acc1.pin);
+
+
+
 ///////////////////////////////////////
 // Coding Challenge #2
 
