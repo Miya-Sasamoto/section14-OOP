@@ -447,29 +447,35 @@ class Account {
   constructor(owner,currency,pin){
     this.owner = owner;
     this.currency = currency;
-    this.pin = pin;
+    this._pin = pin;
     //下の2つのように、任意のインスタンスに、多くのプロパティを渡すことができます
-    this.movements = [];
+    this._movements = [];
+    //このように_を前につけるだけで、「カプセル化っぽくしてますよ」という慣習があるらしい.だからjavaみたいに本当にプライベートになるかはまた別の話。
+    //この_があることによって、チームの人に「触れてはいけない」と明示的に示すことができる。というくらいです
     //navigator.langeageはそのブラウザの場所を示すことができる
     this.locale = navigator.language;
 
     console.log(`Thanks for opening an your account, ${owner}!`);
   }
 
+  getMovements(){
+    return this._movements;
+  }
+
   deposit(val){
-    this.movements.push(val)
+    this._movements.push(val)
   }
   //depositと同じように機能しているからこのように書きます
   withdraw(val){
     this.deposit(-val)
   }
   //ローン貸与を認める
-  approveLoan(val){
+  _approveLoan(val){
     return true;
   }
-  
+
   requestLoan(val){
-    if(this.approveLoan(val)){
+    if(this._approveLoan(val)){
       this.deposit(val);
       console.log(`Loan approved`);
     }
@@ -489,9 +495,10 @@ console.log(acc1);
 acc1.deposit(250);
 acc1.withdraw(100);
 acc1.requestLoan(1000);
+console.log(acc1.getMovements());
 
-console.log(acc1.movements);
-console.log(acc1.pin);
+// console.log(acc1._movements);
+console.log(acc1._pin);
 
 
 
