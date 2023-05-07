@@ -487,11 +487,14 @@ class Account {
   }
 
   deposit(val){
-    this.#movements.push(val)
+    this.#movements.push(val);
+    return this;
+    //この「return this」をすることによってchainingが使えるようになる
   }
   //depositと同じように機能しているからこのように書きます
   withdraw(val){
-    this.deposit(-val)
+    this.deposit(-val);
+    return this;
   }
 
 
@@ -499,6 +502,7 @@ class Account {
     if(this._approveLoan(val)){
       this.deposit(val);
       console.log(`Loan approved`);
+      return this;
     }
   }
 
@@ -532,6 +536,10 @@ console.log(acc1.getMovements());
 // console.log(acc1.#movements);
 // console.log(acc1.#pin);
 
+//225.Chaining Methods
+//↓のようなチェーンは使えるのか
+//depostメソッドのところとかにreturn thisを書くことによってこのchainingが機能します
+console.log(acc1.deposit(300).deposit(500).withdraw(250).requestLoan(25000).withdraw(4000));
 
 
 
