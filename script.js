@@ -411,6 +411,26 @@ steven.name = 'Steven';
 steven.birthYear = 2002;
 steven.calcAge();
 
+//221.Inheritance Between "Classes": Object.create
+//これがobject.createを使った新しい子クラスの実装
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function(firstName,birthYear,course){
+  //親クラスのinit()を再利用することができます
+  PersonProto.init.call(this,firstName,birthYear);
+  this.course = course;
+};
+StudentProto.introduce = function(){
+  console.log(`My name is ${this.firstName}, and I study ${this.course}.`)
+};
+const jay = Object.create(StudentProto);
+//これでjayはstudentprotonの子クラスになった
+//これは親プロトタイプからの継承であり、プロトタイプチェーンの環境にあることを意味する
+jay.init('Jay',2010,'Europian History');
+jay.introduce();
+jay.calcAge()
+
+
+
 //普通に考えて、コンストラクタ関数は、自動t系にインスタンスのプロトタイプがコンストラクタに設定される
 console.log(steven.__proto__ === PersonProto); //true
 
