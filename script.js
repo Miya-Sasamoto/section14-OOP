@@ -442,37 +442,58 @@ sarah.calcAge();//入れた年齢ともに、ここで計算する
 //222.Another Class Example
 //例として、以前Bankistアプリで実装した口座を使用します
 
+//224.Encapsulation: Private Class Fields and Methods
+//8つのフィールドやメソッドの種類がある.でも動画で紹介するのは4つ　
+
+//1)public fields
+//2.private fields
+//3)public methods
+//4)private methods
+//残りの4つはそれぞれのstaticバージョン
+
 class Account {
+  //ここの場合は、movementsとlocaleがパブリックフィールドになる。なぜならコンストラクタに値を渡していないので、全てのインスタンスに対して常に設定されているから
+  //1)public fields
+  locale = navigator.language;
+
+  //2)private fields
+  #movements = [];
+  #pin;
+  //この＃が新しいクラスでフィールドprivateにする構文
+  //これで本当にprivateになります
+  //どうしてpinは=とか書かないかというと、コンストラクタにpinは引数として設定してあるので、必要はないのです
+
   //中に入れる単位を格納
   constructor(owner,currency,pin){
     this.owner = owner;
     this.currency = currency;
-    this._pin = pin;
-    //下の2つのように、任意のインスタンスに、多くのプロパティを渡すことができます
-    this._movements = [];
+    this.#pin = pin; //privateにする
+    //#pinに関してはコンストラクタの外部にてprivateの宣言をしている
+
+    //下の2つのように、任意のインスタンスに、多くのプロパティを渡すことができます（コンストラクタの引数に渡していなくても！）
+    // this._movements = [];
     //このように_を前につけるだけで、「カプセル化っぽくしてますよ」という慣習があるらしい.だからjavaみたいに本当にプライベートになるかはまた別の話。
     //この_があることによって、チームの人に「触れてはいけない」と明示的に示すことができる。というくらいです
     //navigator.langeageはそのブラウザの場所を示すことができる
-    this.locale = navigator.language;
+    // this.locale = navigator.language;
 
     console.log(`Thanks for opening an your account, ${owner}!`);
   }
 
+  //3)public methods
+  //public interface
   getMovements(){
-    return this._movements;
+    return this.#movements;
   }
 
   deposit(val){
-    this._movements.push(val)
+    this.#movements.push(val)
   }
   //depositと同じように機能しているからこのように書きます
   withdraw(val){
     this.deposit(-val)
   }
-  //ローン貸与を認める
-  _approveLoan(val){
-    return true;
-  }
+
 
   requestLoan(val){
     if(this._approveLoan(val)){
@@ -480,6 +501,16 @@ class Account {
       console.log(`Loan approved`);
     }
   }
+
+  //4)private methods
+  //ローン貸与を認める
+  // #approveLoan(val){
+  _approveLoan(val){
+    return true;
+  }
+  //大きな問題は、まだどのブラウザもこの#を使ったprivate methodsに対応していないこと.
+  //いつよ、Chromeではエラーは出ないけど、このメソッドをprivate fieldsのようにして判断している
+
 }
 
 //new演算子を使って、子クラスを実装した
@@ -497,8 +528,10 @@ acc1.withdraw(100);
 acc1.requestLoan(1000);
 console.log(acc1.getMovements());
 
-// console.log(acc1._movements);
-console.log(acc1._pin);
+//以下はもうprivateに設定されているため、無理です。アクセスできません
+// console.log(acc1.#movements);
+// console.log(acc1.#pin);
+
 
 
 
